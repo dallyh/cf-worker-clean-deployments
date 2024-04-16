@@ -1,0 +1,11 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "clean-deployments"
+main = "src/index.ts"
+compatibility_date = "2024-04-05"
+
+[triggers]
+crons = ["0 3 * * *"] #At 03:00 AM
+
+[vars]
+PROJECT_NAMES = ["daliborhon-dev-studio", "daliborhon-dev"]
+EXPIRATION_DAYS = 7
