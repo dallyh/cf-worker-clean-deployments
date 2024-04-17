@@ -33,11 +33,15 @@ async function deleteDeployments(env: Env, project: string, page: number | undef
 		},
 	};
 
-    const endpoint = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/pages/projects/${project}/deployments`;
-    const fetchEndpoint = `${endpoint}?per_page=25${page !== undefined ? "&page=" + page : ""}`
+	const endpoint = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/pages/projects/${project}/deployments`;
+	const fetchEndpoint = `${endpoint}?per_page=25${page !== undefined ? `&page=${page}` : ""}`;
 
 	const response = await fetch(fetchEndpoint, init);
 	const deployments: any = await response.json();
+
+	if (!response.ok) {
+		throw new Error("Error in response: " + response.status);
+	}
 
 	console.log(`Current fetched page is ${deployments.result_info.page} out of ${deployments.result_info.total_pages}...`);
 
@@ -70,7 +74,6 @@ async function deleteDeployments(env: Env, project: string, page: number | undef
 				} else {
 					console.log("Success.");
 				}
-                
 			} catch (err) {
 				console.error(`Failed: ${(err as Error).message}`);
 			}
